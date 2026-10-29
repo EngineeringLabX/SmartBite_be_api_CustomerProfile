@@ -12,19 +12,19 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["SmartBite.CustotmerProfile.API/SmartBite.CustotmerProfile.API.csproj", "SmartBite.CustotmerProfile.API/"]
-RUN dotnet restore "./SmartBite.CustotmerProfile.API/SmartBite.CustotmerProfile.API.csproj"
+COPY ["SmartBite.CustomerProfile.API/SmartBite.CustomerProfile.API.csproj", "SmartBite.CustomerProfile.API/"]
+RUN dotnet restore "./SmartBite.CustomerProfile.API/SmartBite.CustomerProfile.API.csproj"
 COPY . .
-WORKDIR "/src/SmartBite.CustotmerProfile.API"
-RUN dotnet build "./SmartBite.CustotmerProfile.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/SmartBite.CustomerProfile.API"
+RUN dotnet build "./SmartBite.CustomerProfile.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./SmartBite.CustotmerProfile.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./SmartBite.CustomerProfile.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SmartBite.CustotmerProfile.API.dll"]
+ENTRYPOINT ["dotnet", "SmartBite.CustomerProfile.API.dll"]

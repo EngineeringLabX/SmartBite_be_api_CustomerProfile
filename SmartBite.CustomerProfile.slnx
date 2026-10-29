@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="SmartBite.CustomerProfile.API/SmartBite.CustomerProfile.API.csproj" />
+  <Project Path="SmartBite.CustomerProfile.Application/SmartBite.CustomerProfile.Application.csproj" />
+  <Project Path="SmartBite.CustomerProfile.Domain/SmartBite.CustomerProfile.Domain.csproj" />
+  <Project Path="SmartBite.CustomerProfile.Infrastructure/SmartBite.CustomerProfile.Infrastructure.csproj" />
+</Solution>

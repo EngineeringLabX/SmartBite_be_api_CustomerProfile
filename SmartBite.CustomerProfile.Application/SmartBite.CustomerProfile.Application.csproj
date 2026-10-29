@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SmartBite.CustotmerProfile.Domain\SmartBite.CustotmerProfile.Domain.csproj" />
+    <ProjectReference Include="..\SmartBite.CustomerProfile.Domain\SmartBite.CustomerProfile.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

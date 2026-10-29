@@ -1,0 +1,6 @@
+@SmartBite.CustomerProfile.API_HostAddress = http://localhost:5100
+
+GET {{SmartBite.CustomerProfile.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

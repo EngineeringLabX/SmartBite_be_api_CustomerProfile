@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SmartBite.CustotmerProfile.Application\SmartBite.CustotmerProfile.Application.csproj" />
-    <ProjectReference Include="..\SmartBite.CustotmerProfile.Infrastucture\SmartBite.CustotmerProfile.Infrastucture.csproj" />
+    <ProjectReference Include="..\SmartBite.CustomerProfile.Application\SmartBite.CustomerProfile.Application.csproj" />
+    <ProjectReference Include="..\SmartBite.CustomerProfile.Infrastructure\SmartBite.CustomerProfile.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
