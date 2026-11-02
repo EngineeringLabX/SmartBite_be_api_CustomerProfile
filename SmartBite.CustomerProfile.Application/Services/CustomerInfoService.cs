@@ -44,8 +44,8 @@ namespace SmartBite.CustomerProfile.Application.Services
             try
             {
                 _logger.LogInformation("{className} - {methodName} Fetching Customer information ", nameof(CustomerInfoService), nameof(GetAllCustomerInfo));
-                var result = await _repository.GetCustomerInfoAsync(cancellation);
-                if (result?.Count <= 0)
+                var result = await _repository.GetCustomerInfoAsync(customerId, cancellation);
+                if (result == null)
                 {
                     return SBResponse<CustomerInfoDto?>.Success(null, "No Records Found");
                 }
@@ -63,5 +63,68 @@ namespace SmartBite.CustomerProfile.Application.Services
             }
         }
 
+        public async Task<SBResponse<CustomerInfoDto?>> CreateCustomerInfo(CustomerInfoDto dto, CancellationToken cancellation)
+        {
+            try
+            {
+                _logger.LogInformation("{className} - {methodName} Creating Customer information ", nameof(CustomerInfoService), nameof(CreateCustomerInfo));
+                var result = await _repository.CreateCustomerInfoAsync(_mapper.Map<Domain.Entities.CustomerInfo>(dto), cancellation);
+                if (result == null)
+                {
+                    return SBResponse<CustomerInfoDto?>.Failure("Failed to create customer information.", HttpStatusCode.InternalServerError);
+                }
+                return SBResponse<CustomerInfoDto?>.Success(_mapper.Map<CustomerInfoDto>(result), "Customer information created successfully.");
+            }
+            catch (BusinessException bEx)
+            {
+                _logger.LogError("An Error Occured {className} - {methodName} While Creating Customer information ", nameof(CustomerInfoService), nameof(CreateCustomerInfo));
+                return SBResponse<CustomerInfoDto?>.Failure(bEx.Message, bEx.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("An Error Occured {className} - {methodName} While Creating Customer information ", nameof(CustomerInfoService), nameof(CreateCustomerInfo));
+                return SBResponse<CustomerInfoDto?>.Failure(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<SBResponse<bool>> UpdateCustomerInfo(CustomerInfoDto dto, CancellationToken cancellation)
+        {
+            try
+            {
+                _logger.LogInformation("{className} - {methodName} Updating Customer information ", nameof(CustomerInfoService), nameof(UpdateCustomerInfo));
+                var result = await _repository.UpdateCustomerInfoAsync(_mapper.Map<Domain.Entities.CustomerInfo>(dto), cancellation);
+                return SBResponse<bool>.Success(result, "Customer information updated successfully.");
+            }
+            catch (BusinessException bEx)
+            {
+                _logger.LogError("An Error Occured {className} - {methodName} While Updating Customer information ", nameof(CustomerInfoService), nameof(UpdateCustomerInfo));
+                return SBResponse<bool>.Failure(bEx.Message, bEx.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("An Error Occured {className} - {methodName} While Updating Customer information ", nameof(CustomerInfoService), nameof(UpdateCustomerInfo));
+                return SBResponse<bool>.Failure(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
+
+        public async Task<SBResponse<bool>> DeleteCustomerInfo(int customerId, CancellationToken cancellation)
+        {
+            try
+            {
+                _logger.LogInformation("{className} - {methodName} Deleting Customer information ", nameof(CustomerInfoService), nameof(DeleteCustomerInfo));
+                var result = await _repository.DeleteCustomerInfoAsync(customerId, cancellation);
+                return SBResponse<bool>.Success(result, "Customer information deleted successfully.");
+            }
+            catch (BusinessException bEx)
+            {
+                _logger.LogError("An Error Occured {className} - {methodName} While Deleting Customer information ", nameof(CustomerInfoService), nameof(DeleteCustomerInfo));
+                return SBResponse<bool>.Failure(bEx.Message, bEx.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("An Error Occured {className} - {methodName} While Deleting Customer information ", nameof(CustomerInfoService), nameof(DeleteCustomerInfo));
+                return SBResponse<bool>.Failure(ex.Message, HttpStatusCode.InternalServerError);
+            }
+        }
     }
 }
