@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SmartBite.CustomerProfile.Application.Common.Exceptions;
 using SmartBite.CustomerProfile.Domain.Entities;
 using SmartBite.CustomerProfile.Domain.Interfaces;
 using SmartBite.CustomerProfile.Infrastructure.Persistance;
+using System.Net;
 
 namespace SmartBite.CustomerProfile.Infrastructure.Repositories
 {
@@ -61,7 +63,7 @@ namespace SmartBite.CustomerProfile.Infrastructure.Repositories
                 if (!isExist)
                 {
                     _logger.LogWarning("{className} - {methodName} Customer information with CustomerId: {customerId} does not exist. Update operation aborted.", nameof(CustomerInfoRepository), nameof(UpdateCustomerInfoAsync), customerInfo.CustomerId);
-                    throw new Exception($"Customer information with CustomerId: {customerInfo.CustomerId} does not exist. Update operation aborted.");
+                    throw new BusinessException($"Customer information with CustomerId: {customerInfo.CustomerId} does not exist. Update operation aborted.", HttpStatusCode.NotFound);
                 }
                 _context.CustomerInfo.Update(customerInfo);
                 await _context.SaveChangesAsync(cancellation);
@@ -82,7 +84,7 @@ namespace SmartBite.CustomerProfile.Infrastructure.Repositories
                 if (customerInfo == null)
                 {
                     _logger.LogWarning("{className} - {methodName} Customer information with CustomerId: {customerId} does not exist. Delete operation aborted.", nameof(CustomerInfoRepository), nameof(DeleteCustomerInfoAsync), customerId);
-                    throw new Exception($"Customer information with CustomerId: {customerId} does not exist. Delete operation aborted.");
+                    throw new BusinessException($"Customer information with CustomerId: {customerId} does not exist. Delete operation aborted.", HttpStatusCode.NotFound);
                 }
 
                 _context.CustomerInfo.Remove(customerInfo);
