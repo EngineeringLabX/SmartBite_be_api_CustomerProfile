@@ -24,9 +24,4 @@
     <ProjectReference Include="..\SmartBite.CustomerProfile.Domain\SmartBite.CustomerProfile.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Persistance\" />
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>
