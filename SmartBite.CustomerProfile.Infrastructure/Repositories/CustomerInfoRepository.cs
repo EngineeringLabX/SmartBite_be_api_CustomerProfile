@@ -87,7 +87,8 @@ namespace SmartBite.CustomerProfile.Infrastructure.Repositories
                     throw new BusinessException($"Customer information with CustomerId: {customerId} does not exist. Delete operation aborted.", HttpStatusCode.NotFound);
                 }
 
-                _context.CustomerInfo.Remove(customerInfo);
+                customerInfo.IsActive=false;
+                _context.CustomerInfo.Update(customerInfo);
                 await _context.SaveChangesAsync(cancellation);
                 return true;
             }
