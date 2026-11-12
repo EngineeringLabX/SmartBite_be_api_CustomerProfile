@@ -13,6 +13,12 @@ namespace SmartBite.CustomerProfile.Infrastructure.Persistance
         public DbSet<CustomerInfo> CustomerInfo { get; set; }
         public DbSet<Addresses> Addresses { get; set; }
         public DbSet<AddressTypes> AddressTypes { get; set; }
+        public DbSet<MetabolicProfile> MetabolicProfiles { get; set; }
+        public DbSet<CustomerPreference> CustomerPreferences { get; set; }
+        public DbSet<DietaryPreference> DietaryPreferences { get; set; }
+        public DbSet<AllergenRestriction> AllergenRestrictions { get; set; }
+        public DbSet<NutritionTarget> NutritionTargets { get; set; }
+        public DbSet<MealSchedule> MealSchedules { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,6 +32,24 @@ namespace SmartBite.CustomerProfile.Infrastructure.Persistance
 
             builder.Entity<CustomerInfo>().HasQueryFilter(c => c.IsActive);
             builder.Entity<CustomerInfo>().HasKey(c => c.CustomerId).HasName("PK_CustomerInfo_CustomerId");
+
+            builder.Entity<MetabolicProfile>().HasQueryFilter(c => c.IsActive);
+            builder.Entity<MetabolicProfile>().HasKey(c => c.MetabolicProfileId).HasName("PK_MetabolicProfiles_MetabolicProfileId");
+
+            builder.Entity<CustomerPreference>().HasQueryFilter(c => c.IsActive);
+            builder.Entity<CustomerPreference>().HasKey(c => c.CustomerPreferenceId).HasName("PK_CustomerPreferences_CustomerPreferenceId");
+
+            builder.Entity<DietaryPreference>().HasQueryFilter(c => c.IsActive);
+            builder.Entity<DietaryPreference>().HasKey(c => c.DietaryPreferenceId).HasName("PK_DietaryPreferences_DietaryPreferenceId");
+
+            builder.Entity<AllergenRestriction>().HasQueryFilter(c => c.IsActive);
+            builder.Entity<AllergenRestriction>().HasKey(c => c.AllergenRestrictionId).HasName("PK_AllergenRestrictions_AllergenRestrictionId");
+
+            builder.Entity<NutritionTarget>().HasQueryFilter(c => c.IsActive);
+            builder.Entity<NutritionTarget>().HasKey(c => c.NutritionTargetId).HasName("PK_NutritionTargets_NutritionTargetId");
+
+            builder.Entity<MealSchedule>().HasQueryFilter(c => c.IsActive);
+            builder.Entity<MealSchedule>().HasKey(c => c.MealScheduleId).HasName("PK_MealSchedules_MealScheduleId");
         }
     }
 }
