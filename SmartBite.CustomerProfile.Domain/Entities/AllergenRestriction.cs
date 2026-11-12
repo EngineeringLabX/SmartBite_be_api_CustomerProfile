@@ -12,7 +12,7 @@ namespace SmartBite.CustomerProfile.Domain.Entities
         public int AllergenRestrictionId { get; set; }
 
         public int CustomerId { get; set; }
-        public required string AllergenName { get; set; }
+        public int AllergyId { get; set; }
         public AllergenSeverity Severity { get; set; }
     }
 }
