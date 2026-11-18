@@ -13,28 +13,33 @@ namespace SmartBite.CustomerProfile.Infrastructure.Repositories
         private readonly CustomerProfileDbContext _context = context;
         private readonly ILogger<AllergenRestrictionRepository> _logger = logger;
 
-        public async Task<List<AllergenRestriction>?> GetAllAllergenRestrictionsAsync(CancellationToken cancellation)
+        public async Task<List<AllergenRestriction>?> GetAllAllergenRestrictionsAsync(int customerId, CancellationToken cancellation)
         {
             try
             {
-                return await _context.AllergenRestrictions.AsNoTracking().ToListAsync(cancellation);
+                return await _context.AllergenRestrictions
+                    .AsNoTracking()
+                    .Where(a => a.CustomerId == customerId)
+                    .ToListAsync(cancellation);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred {className} - {methodName} while fetching all allergen restrictions.", nameof(AllergenRestrictionRepository), nameof(GetAllAllergenRestrictionsAsync));
+                _logger.LogError(ex, "An error occurred {className} - {methodName} while fetching allergen restrictions for CustomerId: {customerId}.", nameof(AllergenRestrictionRepository), nameof(GetAllAllergenRestrictionsAsync), customerId);
                 return null;
             }
         }
 
-        public async Task<AllergenRestriction?> GetAllergenRestrictionAsync(int allergenRestrictionId, CancellationToken cancellation)
+        public async Task<AllergenRestriction?> GetAllergenRestrictionAsync(int customerId, int allergenRestrictionId, CancellationToken cancellation)
         {
             try
             {
-                return await _context.AllergenRestrictions.AsNoTracking().FirstOrDefaultAsync(a => a.AllergenRestrictionId == allergenRestrictionId, cancellation);
+                return await _context.AllergenRestrictions
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(a => a.CustomerId == customerId && a.AllergenRestrictionId == allergenRestrictionId, cancellation);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred {className} - {methodName} while fetching allergen restriction for AllergenRestrictionId: {allergenRestrictionId}.", nameof(AllergenRestrictionRepository), nameof(GetAllergenRestrictionAsync), allergenRestrictionId);
+                _logger.LogError(ex, "An error occurred {className} - {methodName} while fetching allergen restriction for CustomerId: {customerId}, AllergenRestrictionId: {allergenRestrictionId}.", nameof(AllergenRestrictionRepository), nameof(GetAllergenRestrictionAsync), customerId, allergenRestrictionId);
                 return null;
             }
         }
@@ -58,10 +63,10 @@ namespace SmartBite.CustomerProfile.Infrastructure.Repositories
         {
             try
             {
-                if (!await _context.AllergenRestrictions.AnyAsync(a => a.AllergenRestrictionId == allergenRestriction.AllergenRestrictionId, cancellation))
+                if (!await _context.AllergenRestrictions.AnyAsync(a => a.CustomerId == allergenRestriction.CustomerId && a.AllergenRestrictionId == allergenRestriction.AllergenRestrictionId, cancellation))
                 {
-                    _logger.LogWarning("{className} - {methodName} Allergen restriction with AllergenRestrictionId: {allergenRestrictionId} does not exist. Update operation aborted.", nameof(AllergenRestrictionRepository), nameof(UpdateAllergenRestrictionAsync), allergenRestriction.AllergenRestrictionId);
-                    throw new BusinessException($"Allergen restriction with AllergenRestrictionId: {allergenRestriction.AllergenRestrictionId} does not exist. Update operation aborted.", HttpStatusCode.NotFound);
+                    _logger.LogWarning("{className} - {methodName} Allergen restriction with CustomerId: {customerId}, AllergenRestrictionId: {allergenRestrictionId} does not exist. Update operation aborted.", nameof(AllergenRestrictionRepository), nameof(UpdateAllergenRestrictionAsync), allergenRestriction.CustomerId, allergenRestriction.AllergenRestrictionId);
+                    throw new BusinessException($"Allergen restriction with CustomerId: {allergenRestriction.CustomerId}, AllergenRestrictionId: {allergenRestriction.AllergenRestrictionId} does not exist. Update operation aborted.", HttpStatusCode.NotFound);
                 }
 
                 _context.AllergenRestrictions.Update(allergenRestriction);
@@ -75,15 +80,16 @@ namespace SmartBite.CustomerProfile.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> DeleteAllergenRestrictionAsync(int allergenRestrictionId, CancellationToken cancellation)
+        public async Task<bool> DeleteAllergenRestrictionAsync(int customerId, int allergenRestrictionId, CancellationToken cancellation)
         {
             try
             {
-                var allergenRestriction = await _context.AllergenRestrictions.FirstOrDefaultAsync(a => a.AllergenRestrictionId == allergenRestrictionId, cancellation);
+                var allergenRestriction = await _context.AllergenRestrictions
+                    .FirstOrDefaultAsync(a => a.CustomerId == customerId && a.AllergenRestrictionId == allergenRestrictionId, cancellation);
                 if (allergenRestriction == null)
                 {
-                    _logger.LogWarning("{className} - {methodName} Allergen restriction with AllergenRestrictionId: {allergenRestrictionId} does not exist. Delete operation aborted.", nameof(AllergenRestrictionRepository), nameof(DeleteAllergenRestrictionAsync), allergenRestrictionId);
-                    throw new BusinessException($"Allergen restriction with AllergenRestrictionId: {allergenRestrictionId} does not exist. Delete operation aborted.", HttpStatusCode.NotFound);
+                    _logger.LogWarning("{className} - {methodName} Allergen restriction with CustomerId: {customerId}, AllergenRestrictionId: {allergenRestrictionId} does not exist. Delete operation aborted.", nameof(AllergenRestrictionRepository), nameof(DeleteAllergenRestrictionAsync), customerId, allergenRestrictionId);
+                    throw new BusinessException($"Allergen restriction with CustomerId: {customerId}, AllergenRestrictionId: {allergenRestrictionId} does not exist. Delete operation aborted.", HttpStatusCode.NotFound);
                 }
 
                 allergenRestriction.IsActive = false;

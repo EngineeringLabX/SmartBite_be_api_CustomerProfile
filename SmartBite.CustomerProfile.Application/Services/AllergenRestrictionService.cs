@@ -15,12 +15,12 @@ namespace SmartBite.CustomerProfile.Application.Services
         private readonly IMapper _mapper = mapper;
         private readonly ILogger<AllergenRestrictionService> _logger = logger;
 
-        public async Task<SBResponse<List<AllergenRestrictionDto>?>> GetAllAllergenRestrictions(CancellationToken cancellation)
+        public async Task<SBResponse<List<AllergenRestrictionDto>?>> GetAllAllergenRestrictions(int customerId, CancellationToken cancellation)
         {
             try
             {
                 _logger.LogInformation("{className} - {methodName} Fetching Allergen restriction information ", nameof(AllergenRestrictionService), nameof(GetAllAllergenRestrictions));
-                var result = await _repository.GetAllAllergenRestrictionsAsync(cancellation);
+                var result = await _repository.GetAllAllergenRestrictionsAsync(customerId, cancellation);
                 return SBResponse<List<AllergenRestrictionDto>?>.Success(result?.Count > 0 ? _mapper.Map<List<AllergenRestrictionDto>>(result) : [], result?.Count > 0 ? "Allergen restriction information fetched successfully." : "No Records Found");
             }
             catch (BusinessException bEx)
@@ -35,12 +35,12 @@ namespace SmartBite.CustomerProfile.Application.Services
             }
         }
 
-        public async Task<SBResponse<AllergenRestrictionDto?>> GetAllergenRestriction(int allergenRestrictionId, CancellationToken cancellation)
+        public async Task<SBResponse<AllergenRestrictionDto?>> GetAllergenRestriction(int customerId, int allergenRestrictionId, CancellationToken cancellation)
         {
             try
             {
                 _logger.LogInformation("{className} - {methodName} Fetching Allergen restriction information ", nameof(AllergenRestrictionService), nameof(GetAllergenRestriction));
-                var result = await _repository.GetAllergenRestrictionAsync(allergenRestrictionId, cancellation);
+                var result = await _repository.GetAllergenRestrictionAsync(customerId, allergenRestrictionId, cancellation);
                 return result == null ? SBResponse<AllergenRestrictionDto?>.Success(null, "No Records Found") : SBResponse<AllergenRestrictionDto?>.Success(_mapper.Map<AllergenRestrictionDto>(result), "Allergen restriction information fetched successfully.");
             }
             catch (BusinessException bEx)
@@ -94,12 +94,12 @@ namespace SmartBite.CustomerProfile.Application.Services
             }
         }
 
-        public async Task<SBResponse<bool>> DeleteAllergenRestriction(int allergenRestrictionId, CancellationToken cancellation)
+        public async Task<SBResponse<bool>> DeleteAllergenRestriction(int customerId, int allergenRestrictionId, CancellationToken cancellation)
         {
             try
             {
                 _logger.LogInformation("{className} - {methodName} Deleting Allergen restriction information ", nameof(AllergenRestrictionService), nameof(DeleteAllergenRestriction));
-                return SBResponse<bool>.Success(await _repository.DeleteAllergenRestrictionAsync(allergenRestrictionId, cancellation), "Allergen restriction information deleted successfully.");
+                return SBResponse<bool>.Success(await _repository.DeleteAllergenRestrictionAsync(customerId, allergenRestrictionId, cancellation), "Allergen restriction information deleted successfully.");
             }
             catch (BusinessException bEx)
             {
