@@ -16,6 +16,7 @@ namespace SmartBite.CustomerProfile.Infrastructure.Persistance
         public DbSet<MetabolicProfile> MetabolicProfiles { get; set; }
         public DbSet<CustomerPreference> CustomerPreferences { get; set; }
         public DbSet<DietaryPreference> DietaryPreferences { get; set; }
+        public DbSet<DietPattern> DietPatterns { get; set; }
         public DbSet<AllergenRestriction> AllergenRestrictions { get; set; }
         public DbSet<Allergy> Allergies { get; set; }
         public DbSet<NutritionTarget> NutritionTargets { get; set; }
@@ -42,6 +43,9 @@ namespace SmartBite.CustomerProfile.Infrastructure.Persistance
 
             builder.Entity<DietaryPreference>().HasQueryFilter(c => c.IsActive);
             builder.Entity<DietaryPreference>().HasKey(c => c.DietaryPreferenceId).HasName("PK_DietaryPreferences_DietaryPreferenceId");
+
+            builder.Entity<DietPattern>().HasQueryFilter(c => c.IsActive);
+            builder.Entity<DietPattern>().HasKey(c => c.DietPatternId).HasName("PK_DietPatterns_DietPatternId");
 
             builder.Entity<AllergenRestriction>().HasQueryFilter(c => c.IsActive);
             builder.Entity<AllergenRestriction>().HasKey(c => c.AllergenRestrictionId).HasName("PK_AllergenRestrictions_AllergenRestrictionId");

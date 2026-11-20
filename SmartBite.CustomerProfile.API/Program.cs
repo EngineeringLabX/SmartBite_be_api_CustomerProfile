@@ -17,10 +17,12 @@ builder.Services.AddAutoMapper(cfg => { }, typeof(CustomerProfile).Assembly);
 builder.Services.AddScoped<ICustomerInfoRepository, CustomerInfoRepository>();
 builder.Services.AddScoped<IAllergyRepository, AllergyRepository>();
 builder.Services.AddScoped<IAllergenRestrictionRepository, AllergenRestrictionRepository>();
+builder.Services.AddScoped<IDietPatternRepository, DietPatternRepository>();
 
 builder.Services.AddScoped<ICustomerInfoService, CustomerInfoService>();
 builder.Services.AddScoped<IAllergyService, AllergyService>();
 builder.Services.AddScoped<IAllergenRestrictionService, AllergenRestrictionService>();
+builder.Services.AddScoped<IDietPatternService, DietPatternService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
