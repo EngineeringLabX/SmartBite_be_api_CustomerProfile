@@ -12,6 +12,6 @@ namespace SmartBite.CustomerProfile.Domain.Entities
         public int DietaryPreferenceId { get; set; }
 
         public int CustomerId { get; set; }
-        public DietPattern DietPattern { get; set; }
+        public int DietPatternId { get; set; }
     }
 }
