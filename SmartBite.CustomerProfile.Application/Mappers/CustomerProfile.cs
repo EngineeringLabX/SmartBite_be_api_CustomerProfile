@@ -12,6 +12,7 @@ namespace SmartBite.CustomerProfile.Application.Mappers
             CreateMap<AllergyDto, Allergy>().ReverseMap();
             CreateMap<AllergenRestrictionDto, AllergenRestriction>().ReverseMap();
             CreateMap<DietPatternDto, DietPattern>().ReverseMap();
+            CreateMap<DietaryPreferenceDto, DietaryPreference>().ReverseMap();
         }
     }
 }
