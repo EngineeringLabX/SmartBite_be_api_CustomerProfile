@@ -15,12 +15,12 @@ namespace SmartBite.CustomerProfile.Application.Services
         private readonly IMapper _mapper = mapper;
         private readonly ILogger<DietaryPreferenceService> _logger = logger;
 
-        public async Task<SBResponse<List<DietaryPreferenceDto>?>> GetAllDietaryPreferences(CancellationToken cancellation)
+        public async Task<SBResponse<List<DietaryPreferenceDto>?>> GetAllDietaryPreferences(int customerId, CancellationToken cancellation)
         {
             try
             {
                 _logger.LogInformation("{className} - {methodName} Fetching Dietary preference information ", nameof(DietaryPreferenceService), nameof(GetAllDietaryPreferences));
-                var result = await _repository.GetAllDietaryPreferencesAsync(cancellation);
+                var result = await _repository.GetAllDietaryPreferencesAsync(customerId, cancellation);
                 return SBResponse<List<DietaryPreferenceDto>?>.Success(result?.Count > 0 ? _mapper.Map<List<DietaryPreferenceDto>>(result) : [], result?.Count > 0 ? "Dietary preference information fetched successfully." : "No Records Found");
             }
             catch (BusinessException bEx)
@@ -35,12 +35,12 @@ namespace SmartBite.CustomerProfile.Application.Services
             }
         }
 
-        public async Task<SBResponse<DietaryPreferenceDto?>> GetDietaryPreference(int dietaryPreferenceId, CancellationToken cancellation)
+        public async Task<SBResponse<DietaryPreferenceDto?>> GetDietaryPreference(int customerId, int dietaryPreferenceId, CancellationToken cancellation)
         {
             try
             {
                 _logger.LogInformation("{className} - {methodName} Fetching Dietary preference information ", nameof(DietaryPreferenceService), nameof(GetDietaryPreference));
-                var result = await _repository.GetDietaryPreferenceAsync(dietaryPreferenceId, cancellation);
+                var result = await _repository.GetDietaryPreferenceAsync(customerId, dietaryPreferenceId, cancellation);
                 return result == null ? SBResponse<DietaryPreferenceDto?>.Success(null, "No Records Found") : SBResponse<DietaryPreferenceDto?>.Success(_mapper.Map<DietaryPreferenceDto>(result), "Dietary preference information fetched successfully.");
             }
             catch (BusinessException bEx)
@@ -95,12 +95,12 @@ namespace SmartBite.CustomerProfile.Application.Services
             }
         }
 
-        public async Task<SBResponse<bool>> DeleteDietaryPreference(int dietaryPreferenceId, CancellationToken cancellation)
+        public async Task<SBResponse<bool>> DeleteDietaryPreference(int customerId, int dietaryPreferenceId, CancellationToken cancellation)
         {
             try
             {
                 _logger.LogInformation("{className} - {methodName} Deleting Dietary preference information ", nameof(DietaryPreferenceService), nameof(DeleteDietaryPreference));
-                var result = await _repository.DeleteDietaryPreferenceAsync(dietaryPreferenceId, cancellation);
+                var result = await _repository.DeleteDietaryPreferenceAsync(customerId, dietaryPreferenceId, cancellation);
                 return SBResponse<bool>.Success(result, "Dietary preference information deleted successfully.");
             }
             catch (BusinessException bEx)

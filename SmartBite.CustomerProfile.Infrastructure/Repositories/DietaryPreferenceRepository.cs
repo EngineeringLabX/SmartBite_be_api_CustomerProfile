@@ -13,11 +13,11 @@ namespace SmartBite.CustomerProfile.Infrastructure.Repositories
         private readonly CustomerProfileDbContext _context = context;
         private readonly ILogger<DietaryPreferenceRepository> _logger = logger;
 
-        public async Task<List<DietaryPreference>?> GetAllDietaryPreferencesAsync(CancellationToken cancellation)
+        public async Task<List<DietaryPreference>?> GetAllDietaryPreferencesAsync(int customerId, CancellationToken cancellation)
         {
             try
             {
-                return await _context.DietaryPreferences.AsNoTracking().ToListAsync(cancellation);
+                return await _context.DietaryPreferences.AsNoTracking().Where(d => d.CustomerId == customerId).ToListAsync(cancellation);
             }
             catch (Exception ex)
             {
@@ -26,11 +26,11 @@ namespace SmartBite.CustomerProfile.Infrastructure.Repositories
             }
         }
 
-        public async Task<DietaryPreference?> GetDietaryPreferenceAsync(int dietaryPreferenceId, CancellationToken cancellation)
+        public async Task<DietaryPreference?> GetDietaryPreferenceAsync(int customerId, int dietaryPreferenceId, CancellationToken cancellation)
         {
             try
             {
-                return await _context.DietaryPreferences.AsNoTracking().FirstOrDefaultAsync(d => d.DietaryPreferenceId == dietaryPreferenceId, cancellation);
+                return await _context.DietaryPreferences.AsNoTracking().FirstOrDefaultAsync(d => d.CustomerId == customerId && d.DietaryPreferenceId == dietaryPreferenceId, cancellation);
             }
             catch (Exception ex)
             {
@@ -58,7 +58,7 @@ namespace SmartBite.CustomerProfile.Infrastructure.Repositories
         {
             try
             {
-                if (!await _context.DietaryPreferences.AnyAsync(d => d.DietaryPreferenceId == dietaryPreference.DietaryPreferenceId, cancellation))
+                if (!await _context.DietaryPreferences.AnyAsync(d => d.CustomerId == dietaryPreference.CustomerId && d.DietaryPreferenceId == dietaryPreference.DietaryPreferenceId, cancellation))
                 {
                     _logger.LogWarning("{className} - {methodName} Dietary preference with DietaryPreferenceId: {dietaryPreferenceId} does not exist. Update operation aborted.", nameof(DietaryPreferenceRepository), nameof(UpdateDietaryPreferenceAsync), dietaryPreference.DietaryPreferenceId);
                     throw new BusinessException($"Dietary preference with DietaryPreferenceId: {dietaryPreference.DietaryPreferenceId} does not exist. Update operation aborted.", HttpStatusCode.NotFound);
@@ -75,11 +75,11 @@ namespace SmartBite.CustomerProfile.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> DeleteDietaryPreferenceAsync(int dietaryPreferenceId, CancellationToken cancellation)
+        public async Task<bool> DeleteDietaryPreferenceAsync(int customerId, int dietaryPreferenceId, CancellationToken cancellation)
         {
             try
             {
-                var dietaryPreference = await _context.DietaryPreferences.FirstOrDefaultAsync(d => d.DietaryPreferenceId == dietaryPreferenceId, cancellation);
+                var dietaryPreference = await _context.DietaryPreferences.FirstOrDefaultAsync(d => d.CustomerId == customerId && d.DietaryPreferenceId == dietaryPreferenceId, cancellation);
                 if (dietaryPreference == null)
                 {
                     _logger.LogWarning("{className} - {methodName} Dietary preference with DietaryPreferenceId: {dietaryPreferenceId} does not exist. Delete operation aborted.", nameof(DietaryPreferenceRepository), nameof(DeleteDietaryPreferenceAsync), dietaryPreferenceId);
